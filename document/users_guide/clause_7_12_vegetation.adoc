@@ -1,0 +1,9 @@
+[[ug-model-vegetation-section]]
+=== Vegetation
+
+|===
+^|*Contributors*
+|C. Heazel - first draft
+|===
+
+*Under Construction*

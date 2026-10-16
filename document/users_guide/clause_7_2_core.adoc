@@ -1,0 +1,138 @@
+:sectnums:
+
+[[ug-model-core-section]]
+=== Core
+
+|===
+^|*Contributors*
+|C. Heazel - Author
+|===
+
+*Under Construction*
+
+[[ug-key-concepts-section]]
+==== Key Concepts
+
+The following is a summary of the key concepts described by the Core Module. This is not an exhaustive listing of all of the Core concepts. Rather, it is an introduction those concepts which are essential for understanding the role of the Core Module in the CityGML Conceptual Model. 
+
+[[city-model-concept]]
+<<ug-city-model-section,*CityModel*>>: (<<ug-city-model-section,Discussion>>) The CityModel class is the root class of every CityGML conceptual model. It's primary purpose is to aggregate CityModelMembers.
+
+[[city-model-member-concept]]
+<<ug-city-model-member-section,*CityModelMember*>>: (<<ug-city-model-member-section,Discussion>>) CityModelMember is a Union of all possible classes which can be included in a city model. Those classes are summarized in <<city-model-member-table>>.
+
+[[city-model-member-table,Table {counter:table-num}]]
+.City Model Members
+[cols="2,6"]
+|===
+|<<abstract-appearance-concept,AbstractAppearance>>|Rules for rending the associated objects
+|<<abstract-city-object-concept,AbstractCityObject>>|Physical objects with a location and geometry
+|<<abstract-feature-concept,AbstractFeature>>|Others
+|<<abstract-version-concept,AbstractVersion>>|Version information
+|<<abstract-version-transition-concept,AbstractVersionTransition>>|Version information
+|===
+
+[[abstract-feature-concept]]
+<<ug-abstract-feature-section,*AbstractFeature*>>: (<<ug-abstract-feature-section,Discussion>>) AbstractFeature is a subclass of the AnyFeature class from the ISO General Feature Model. Every &#171;FeatureType&#187; class in a CityGML model is descended from this class. `AbstractFeature` also defines identifying attributes which are common across the model. Finally, `AbstractFeature` allows an <<ug-ade-section,ADE>> to be associated with any &#171;FeatureType&#187; class.
+
+[[abstract-feature-with-lifespan-concept]]
+<<ug-abstract-feature-with-lifespan-section,*AbstractFeatureWithLifespan*>>: (<<ug-abstract-feature-with-lifespan-section,Discussion>>)This class extends <<abstract-feature-concept,AbstractFeature>> with temporal properties for the classes. Most Feature classes in the CityGML model are descended from this class. As such they contain the following attributes:
+
+* featureId
+* identifier
+* name
+* description
+* creationDate
+* terminationDate
+* validFrom
+* validTo
+* adeOfAbstractFeatureWithLifespan
+
+[[abstract-appearance-concept]]
+<<ug-abstract-appearance-section,*AbstractAppearance*>>: (<<ug-abstract-appearance-section,Discussion>>) The root class for all classes related to the rendering of the model including textures and materials.
+
+[[abstract-version-concept]]
+<<ug-abstract-version-section,*AbstractVersion*>>: (<<ug-abstract-version-section,Discussion>>) a defined state of a city model consisting of the dedicated versions of all city object instances that belong to the respective city model version.
+
+[[abstract-version-transition-concept]]
+<<ug-abstract-version-transition-section,*AbstractVersionTransition*>>: (<<ug-abstract-version-transition-section,Discussion>>) describes the change of the state of a city model from one version to another.
+
+[[abstract-city-object-concept]]
+<<ug-abstract-city-object-section,*AbstractCityObject*>>: (<<ug-abstract-city-object-section,Discussion>>) The superclass of all thematic classes within the CityGML conceptual model. Significant subclasses of `AbstractCityObject` are <<abstract-space-concept,AbstractSpace>> and <<abstract-space-boundary-concept,AbstractSpaceBoundary>>. These subclasses provide CityGML objects with location, geometry and boundary properties.
+
+[[abstract-space-concept]]
+<<ug-space-concepts-section,*AbstractSpace*>>: (<<ug-space-concepts-section,Discussion>>) Classes which have a volumetric extent in the real world.
+
+[[abstract-physical-space-concept]]
+<<ug-space-concepts-section,*AbstractPhysicalSpace*>>: (<<ug-space-concepts-section,Discussion>>) AbstractPhysicalSpace is the abstract superclass for all types of physical spaces. Physical space refers to spaces that are fully or partially bounded by physical objects.
+
+[[abstract-occupied-space-concept]]
+<<ug-space-concepts-section,*AbstractOccupiedSpace*>>: (<<ug-space-concepts-section,Discussion>>) Classes which describe <<abstract-space-concept,spaces>> that are partially or entirely filled with matter.
+
+[[abstract-unoccupied-space-concept]]
+<<ug-space-concepts-section,*AbstractUnoccupiedSpace*>>: (<<ug-space-concepts-section,Discussion>>) Classes which describe <<abstract-space-concept,spaces>> that are entirely or mostly free of matter.
+
+[[abstract-logical-space-concept]]
+<<ug-space-concepts-section,*AbstractLogicalSpace*>>: (<<ug-space-concepts-section,Discussion>>) Classes which describe <<abstract-space-concept,spaces>> that are not bounded by physical surfaces but are defined according to thematic considerations.
+
+[[abstract-space-boundary-concept]]
+<<ug-space-concepts-section,*AbstractSpaceBoundary*>>: (<<ug-space-concepts-section,Discussion>>) Classes which bound a space.
+
+[[abstract-thematic-surface-concept]]
+<<ug-space-concepts-section,*AbstractThematicSurface*>>: (<<ug-space-concepts-section,Discussion>>) The superclass for all thematic surfaces. A type of <<abstract-space-boundary-concept,Space Boundary>>.
+
+[[implicit-geometry-concept]]
+<<ug-space-concepts-section,*ImplicitGeometry*>>: (<<ug-space-concepts-section,Discussion>>) A geometry representation where the shape is stored only once as a prototypical geometry, for example a tree or other vegetation object, a traffic light or a traffic sign. This prototypic geometry object can be re-used or referenced many times, wherever the corresponding feature occurs in the 3D city model. A type of <<abstract-feature-concept,Abstract Feature>>.
+
+[[abstract-generic-attribute-concept]]
+*AbstractGenericAttribute*: AbstractGenericAttribute is the abstract superclass for all types of generic attributes.
+
+[[ug-city-objects-section]]
+==== City Models and City Objects
+
+*Under Construction*
+
+[[ug-city-model-section]]
+===== CityModel
+
+*Under Construction*
+
+[[ug-city-model-member-section]]
+===== CityModelMember
+
+*Under Construction*
+
+[[ug-abstract-feature-section]]
+===== AbstractFeature
+
+*Under Construction*
+
+[[ug-abstract-feature-with-lifespan-section]]
+===== AbstractFeatureWithLifespan
+
+*Under Construction*
+
+[[ug-abstract-appearance-section]]
+===== AbstractAppearance
+
+*Under Construction*
+
+[[ug-abstract-version-section]]
+===== AbstractVersion
+
+*Under Construction*
+
+[[ug-abstract-version-transition-section]]
+===== AbstractVersionTransition
+
+*Under Construction*
+
+[[ug-abstract-city-object-section]]
+===== AbstractCityObject
+
+*Under Construction*
+
+[[ug-space-concepts-section]]
+==== Space Concept
+
+*Under Construction*

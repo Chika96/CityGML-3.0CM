@@ -1,0 +1,9 @@
+[[ug-model-land-use-section]]
+=== Land Use
+
+|===
+^|*Contributors*
+|Chuck Heazel - first draft
+|===
+
+*Under Construction*

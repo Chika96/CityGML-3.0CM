@@ -1,0 +1,32 @@
+{
+        "0":  {
+                "OGC_doc_number": "20-010",
+                "urn":"http://www.opengis.net/doc/IS/CityGML/3.0",
+                "title":"OGC City Geography Markup Language (CityGML) Conceptual Model Standard",
+                "path":"standard/CityGML_Conceptual_Model.adoc",
+                "options": ["--trace"],
+                "a":[
+                        "data-uri",
+                        "stylesdir=./resources/stylesheets",
+                        "dot=/usr/bin/dot"
+                ],
+                "r":[
+                        "asciidoctor-diagram"
+                ]
+        },
+        "1":  {
+                "OGC_doc_number": "20-066",
+                "urn":"http://www.opengis.net/doc/EG/CityGML/3.0",
+                "title":"OGC City Geography Markup Language (CityGML) Conceptual Model Users Guide",
+                "path":"users_guide/CityGML_Conceptual_Model_Users_Guide.adoc",
+                "options": ["--trace"],
+                "a":[
+                        "data-uri",
+                        "stylesdir=./resources/stylesheets",
+                        "dot=/usr/bin/dot"
+                ],
+                "r":[
+                        "asciidoctor-diagram"
+                ]
+        }
+ }

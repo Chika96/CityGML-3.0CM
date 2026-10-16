@@ -1,0 +1,50 @@
+[big]*i.     Abstract*
+
+CityGML is an open conceptual data model for the storage and exchange of virtual 3D city models. It is defined through a Unified Modeling Language (UML) object model. This UML model extends the ISO Technical Committee 211 (TC211) conceptual model standards for spatial and temporal data. Building on the ISO foundation assures that the man-made features described in the City Models share the same spatial-temporal universe as the surrounding countryside within which they reside.
+The aim of the development of CityGML is to reach a common definition of the basic entities, attributes, and relations of a 3D city model. This is especially important with respect to the cost-effective sustainable maintenance of 3D city models, allowing the reuse of the same data in different application fields.
+
+This Users Guide provides extended explanations and examples for the individual concepts that are defined in the CityGML 3.0 Conceptual Model Standard. Both documents, the Conceptual Model Standard and the Users Guide, are mutually linked to facilitate navigation between corresponding sections in these documents.
+
+[big]*ii.    Keywords*
+
+The following are keywords to be used by search engines and document catalogues.
+
+ogcdoc, OGC document, CityGML, 3D city models
+
+[big]*iii.   Preface*
+
+Attention is drawn to the possibility that some of the elements of this document may be the subject of patent rights. The Open Geospatial Consortium shall not be held responsible for identifying any or all such patent rights.
+
+Recipients of this document are requested to submit, with their comments, notification of any relevant patent claims or other intellectual property rights of which they may be aware that might be infringed by any implementation of the standard set forth in this document, and to provide supporting documentation.
+
+[big]*iv.    Submitting organizations*
+
+The following organizations submitted this Document to the Open Geospatial Consortium (OGC):
+
+* Heazeltech LLC
+
+[big]*v.     Submitters*
+
+All questions regarding this submission should be directed to the editor or the submitters:
+
+[#submission_contact_points,reftext='{table-caption} {counter:table-num}']
+.Submission Contact Points
+[width="100%",cols="5,10",options="header"]
+|===
+|Name |Institution
+|Charles (Chuck) Heazel |HeazelTech LLC
+|===
+
+[big]*vi.     Contributors*
+
+The following individuals contributed content to the CityGML 3.0 Users Guide:
+
+[#participants_in_development,reftext='{table-caption} {counter:table-num}']
+.Participants in the Users Guide development
+[width="100%",cols="5,10",options="header"]
+|===
+|Name |Institution
+|Emmanuel Devys |Institut national de l’information géographique et forestière (IGN), France
+|Charles (Chuck) Heazel |HeazelTech LLC
+|Tatjana Kutzner |Chair of Geoinformatics, Technical University of Munich, Germany
+|===

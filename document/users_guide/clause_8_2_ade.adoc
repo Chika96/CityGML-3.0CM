@@ -1,0 +1,9 @@
+[[ug-ade-section]]
+=== Application Domain Extensions
+
+|===
+^|*Contributors*
+|TBD
+|===
+
+*Under Construction*

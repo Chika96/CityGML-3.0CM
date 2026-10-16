@@ -1,0 +1,9 @@
+[[ug-model-city-furniture-section]]
+=== City Furniture
+
+|===
+^|*Contributors*
+|C. Heazel: first draft
+|===
+
+*Under Construction*

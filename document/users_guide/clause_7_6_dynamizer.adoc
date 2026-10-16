@@ -1,0 +1,9 @@
+[[ug-model-dynamizer-section]]
+=== Dynamizer
+
+|===
+^|*Contributors*
+|C. Heazel - first draft
+|===
+
+*Under Construction*

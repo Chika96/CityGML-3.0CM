@@ -1,0 +1,9 @@
+[[ug-model-city-object-group-section]]
+=== City Object Group
+
+|===
+^|*Contributors*
+|C. Heazel: first draft
+|===
+
+*Under Construction*

@@ -1,0 +1,11 @@
+:sectnums:
+
+[[ug-model-structure-section]]
+=== Structural Overview
+
+|===
+^|*Contributors*
+|C. Heazel - first draft
+|===
+
+*Under Construction*

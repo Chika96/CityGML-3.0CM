@@ -1,0 +1,22 @@
+CityGML version 3.0 consists of a single Conceptual Model and multiple implementations of the Conceptual Model using different data definition and data storage methodologies. Each storage methodology is designated as a named encoding. This scope of this repository is encodings of the Conceptual Model.
+
+image::images/implementation_specifications.png[align="center]
+
+These Implementation Specifications are being developed on the https://github.com/opengeospatial/CityGML-3.0Encodings[CityGML-3.0 Encodings] GitHub repository.
+
+[[ug-citygml-gml-encodings-section]]
+=== GML Encoding Standard
+
+Work is well underway on the *GML Encoding Standard for CityGML 3.0* Implementation Specification.  
+
+Draft versions of the Standard are availble as https://github.com/opengeospatial/CityGML-3.0Encodings/blob/working/CityGML/21-000.pdf[PDF] and https://github.com/opengeospatial/CityGML-3.0Encodings/blob/working/CityGML/21-000.html[HTML] documents.
+
+[[ug-citygml-json-encodings-section]]
+=== JSON Encoding Standard
+
+Work has not yet begun on this Implementation Specification.
+
+[[ug-citygml-rdbms-encodings-section]]
+=== Relational Database Encoding Standard
+
+Work has not yet begun on this Implementation Specification.

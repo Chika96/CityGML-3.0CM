@@ -1,0 +1,265 @@
+[appendix]
+:appendix-caption: Annex
+[[Requirements Guide]]
+= Requirements Guide (Informative)
+
+This section is an informative guide for non-encoding specific CityGML 3.0 requirements that supplement the existing requirements of the CityGML 3.0 CM. These requirements may apply to several or all potential encodings of the CityGML 3.0 CM.
+
+== Global Geometry Requirements
+
+The geometry of CityGML spaces and objects is ultimately defined by numerical quantities used in structures derived from ISO 19136 and ISO 19107. There are requirements on the numerical values themselves, for example that they must be representable using both the GML UTF-8 encoding of this Encoding Standard and a computing system capable of a sufficiently precise hardware representation. There are also requirements on the number, structure, and inter/relationships between these values. Some of these requirements are expressed in the normative UML. Some derive from mathematical principles. And some are application-dependent and require additional application-specific metadata or derived values to express a requirement. 
+
+Examples of the latter include tests of position equality and whether or not a geometry is planar. For this purpose, the Encoding Standard adds some specific terminology, definitions, and mechanisms to receive or estimate two parameters: _planarityTolerance_ and _positionTolerance_.
+
+Note that some of the geometric requirements are stronger than the underlying GML requirements of ISO 19107 and ISO 19136 as well as some of the conditions applied in the CityGML 2.0 Quality Interoperability Experiment. The intention is to enhance interoperability of exchanged CityGML 3.0 models across a range of computing environments. This is achieved by using these Global Geometry Requirements to enable pre-validation tests of CityGML geometry. This helps eliminate the overhead of difficult or unreliable error-checking, possible application failure, or tricky on-the-fly repair on the end user platform.
+
+===  Metadata
+Some requirements on the geometric content of a CityGML instance can only be tested in conjunction with two distance measures: a _planarityTolerance_ and a _positionTolerance_. 
+These values are application-specific and are additionally constrained by the choice of numerical representation. These values can be specified as metadata. If metadata is not provided, they may be estimated from the position data stored with geometry in a specific instance.
+
+===  Terminology
+1. A given set of points or positions (i.e. a :DirectPosition) defining control points of a geometry are called _vertices_ or vertex points.
+2. Interpolated points between successive vertices lie on _edges_.
+3. Points on edges, excluding the vertices, are called _interior points_.
+4. The procedure for computing the interpolated location of interior points is called the _interpolation scheme_.
+
+===  Definitions
+*Best Fit Plane*
+In this standard, a best-fit plane for a set of at least three distinct three-dimensional points is a plane that minimises the sum of the squares of the distances of the individual points from that plane.
+
+*Tolerances*
+1. A _planarityTolerance_ is an application-specific length value of that name specified in metadata or, if not specified in metadata, it is the value 1/1000 of the square root of the area of the geometry, projected to a best-fit surface.
+2. A _positionTolerance_ is an application-specific length value of that name specified in metadata, or if not specified in metadata, it is the value of a distance of one one-millionth of the longest dimension of the boundedBy Envelope of the instance.
+
+*__Is-Planar__ Property*
+A surface geometry element or point cloud has the _is-planar_ property if no point in the geometry is located further than the planarityToleranceDistance from a best-fit plane defined by the points of the geometry.
+
+*Surfaces Are-__CoPlanar__ Property*
+Multiple surface geometry elements or point clouds have the _are-coplanar_ property if no point in any geometry element is located further than the planarityTolerance from a best-fit plane defined by all points of the geometries.
+
+=== Requirements
+*Position Compatibility Requirement (Global)*
+The coordinates of every position in every geometry SHALL be within the range of values appropriate to the coordinate axes and the coordinate reference system.
+
+*GM_Curve Requirements*
+1. A GM_Curve SHALL contain more than one distinct vertex.
+2. A GM_Curve SHALL NOT contain any two successive vertices with a separation of less than positionTolerance.
+3. No vertex in a GM_Curve SHALL be closer than the positionTolerance to any interpolated interior point of an edge joining two successive vertices.
+4. No interior point in a GM_Curve of any edge joining two successive vertices SHALL be closer than the positionTolerance to an interpolated interior point of another edge.
+
+*GM_MultiCurve Requirement*
+Every member curve of a GM_MultiCurve SHALL satisfy all Curve requirements.
+
+*GM_Ring Requirements*
+1. A GM_Ring SHALL have at least 4 vertices.
+2. The distance between the first and last vertices of a GM_Ring SHALL be less than positionTolerance.
+3. No vertex SHALL be closer than positionTolerance to any interior point of an edge joining two successive vertex points.
+4. No interior point of any edge joining two successive vertices SHALL be closer than the positionTolerance to an interior point of another edge.	
+5. The distance between successive vertices SHALL be greater than positionTolerance.
+
+*GM_Polygon Requirements*
+1. A GM_Polygon SHALL have one Outer GM_Ring
+2. If a GM_Polygon has Inner GM_Rings, each Inner GM_Ring SHALL have an orientation opposite to the orientation of the Outer GM_Ring.
+3. If a GM_Polygon has Inner GM_Rings, all vertices and interior points of each Inner GM_Ring SHALL be no closer than positionTolerance to any vertex or inner point of the Outer GM_Ring.
+4. No point on any GM_Ring SHALL be closer than positionTolerance from any point on any other GM_Ring.
+5. No edge between two points on any GM_Ring SHALL intersect any other GM_Ring.
+6. All GM_Rings of a GM_Polygon SHALL jointly have the are-coplanar property.
+
+*GM_Solid Requirements*
+1. A GM_Solid SHALL enclose a non-zero volume inside one Exterior GM_Shell.
+2. The GM_Shell enclosing the volume of a GM_Solid SHALL represent a closed 2-manifold homeomorphic to a 2-sphere. 
+3. Any 2-sphere homeomorphic to the GM_Shell SHALL have a normal vector directed outward from its centre.
+4. If a GM_Solid has Interior GM_Shell members, any 2-sphere homeomorphic to each individual Interior GM_Shell member SHALL have a normal vector directed inward toward its centre.
+5. If a GM_Solid has Interior GM_Shell members, no point of an Interior GM_Shell member SHALL be closer than positionTolerance to any point of any other Interior GM_Shell member.
+
+== Core
+
+=== Rules for ImplicitGeometry
+
+*Requirement: /req/core/implicitgeometry 1*
+Storing the template geometry (shape) of an ImplicitGeometry element is subject to the following rules:
+A. The template geometry of an ImplicitGeometry element SHALL EITHER be given as GML geometry (inline or by-reference) using the relativeGeometry property OR as URI referencing an external file using the libraryObject attribute BUT NOT BOTH.
+B. If the template geometry is referenced by a URI using the libraryObject attribute then the MIME type of the denoted object SHALL be specified.
+Note: The template geometry SHOULD use a local Cartesian coordinate system. Using a geographic coordinate system cannot be recommended.
+
+*Requirement: /req/core/implicitgeometry2*
+The reference point of an ImplicitGeometry element SHALL be given in world coordinates.
+Note: The spatial reference system to which the world coordinates belong MAY be specified using the srsName attribute of the gml:Point element. If not provided, the reference system is inherited from the feature carrying the ImplicitGeometry or its transitive parent features based on GML rules.
+
+*Requirement: /req/core/implicitgeometry3*
+The absolute world coordinates of an implicit geometry are derived from the template geometry, the transformation matrix, and the reference point according to the following rules:
+A. Each 3D coordinate of the template geometry SHALL be multiplied with the transformation matrix of the ImplicitGeometry element. 
+B. The reference point of the ImplicitGeometry element SHALL be added to each 3D coordinate resulting from the matrix multiplication of rule A. 
+C. The world coordinates received after applying rule B SHALL belong to the same spatial reference system defined for the reference point (see /req/core/implicitgeometry2).
+
+==== Requirements drawn from the SIG3D
+
+*Requirement Number: core:CO-006*
+* Requirement Name: XLinks for Addresses
+* Requirement ID: /req/core/addresselementsorxlink
+* Requirement: The AddressPropertyType may either reference an element SHALL either contain explicitly an Address element or an XLink referencing an Address element .
+
+*Requirement Number: core:CO-007*
+* Requirement Name: Implicit Geometry Spatial Properties
+* Requirement ID: /req/core/implicit-geometry
+* Requirement: CityGML extension modules SHALL use only the type ImplicitRepresentationPropertyType for spatial properties providing implicit geometries.
+* Discussion: In order to geometrically represent a feature using the concept of implicit geometries, the corresponding thematic class of the feature shall define a spatial property of the type ImplicitRepresentationPropertyType.
+
+*Requirement Number: core:CO-009*
+* Requirement Name: X
+* Requirement ID: /req/core/
+* Requirement: The type ImplicitRepresentationPropertyType may contain an ImplicitGeometry element inline or an XLink reference to a remote ImplicitGeometry element using an XLink. If an XLink is used, then the xlink:href attribute of the corresponding property of type ImplicitRepresentationPropertyType SHALL reference a concrete ImplicitGeometry element. Exactly one of the choices contained element or XLink reference SHALL be given.
+
+== Appearance
+
+General requirements:
+* *CM*: A surface geometry SHALL receive at most two textures and two materials per appearance theme - one texture or material for its front side and one for its back side.
+
+== Building
+
+=== Requirements drawn from the SIG3D. 
+
+*Requirement Number: bldg:BU-005*
+* Requirement Name: MultiCurve in LoD < 2
+* Requirement ID: /req/building/multicurve-lod-0-1
+Requirement: If a building has only LoD1 geometry (either Solid or MultiSurface but not both per CO-bldg:BU-003), the lodXMultiCurve, X ∈ [2..3] property shall not be used.
+Discussion:
+A. Starting from LOD2, curve parts of the building shell may be represented using the lodXMultiCurve, X ∈ [2..3], property of _AbstractBuilding. This property shall not be used if the building is only represented in LOD1.
+
+*Requirement Number: bldg:BU-006*
+* Requirement Name: LoD 1 No Building Installations
+* Requirement ID: /req/building/x
+Requirement: If a building has only LoD 1 geometry it SHALL not have a [outerB]buildingInstallation property
+Discussion:
+A. Starting from LOD2, the outerBuildingInstallation property (type: BuildingInstallationPropertyType) of _AbstractBuilding may be used to model BuildingInstallation elements.
+B. BuildingInstallation elements shall only be used to represent outer characteristics of a building which do not have the significance of building parts.
+C. The outerBuildingInstallation property shall not be used if the building is only represented in LOD1.
+
+== Construction
+* An element implementing inherited _AbstractConstructionSurface_ attributes and properties SHALL conform to all recursively inherited Core Module _AbstractThematicSurface_ requirements. 
+* An element implementing inherited AbstractFillingSurface attributes and properties SHALL conform to all recursively inherited Core Module AbstractThematicSurface requirements. 
+* A CeilingSurface element's attributes and properties SHALL conform to all requirements imposed on the inherited Core Module AbstractConstructionSurface and, recursively, on its superclasses. 
+* A DoorSurface element's attributes and properties SHALL conform to all requirements imposed on the inherited Core Module AbstractConstructionSurface and, recursively, on its superclasses.  
+* A FloorSurface element's attributes and properties SHALL conform to all requirements imposed on the inherited Core Module AbstractConstructionSurface and, recursively, on its superclasses. 
+* The geometry of a FloorSurface SHALL be approximately horizontal, that is, approximately normal to the local “up” direction. 
+* A GroundSurface element's attributes and properties SHALL conform to all requirements imposed on the inherited Core Module AbstractConstructionSurface and, recursively, on its superclasses. 
+* The geometry of a GroundSurface SHALL be approximately horizontal, that is, approximately normal to the local “up” direction. 
+* An InteriorWallSurface element's attributes and properties SHALL conform to all requirements imposed on the inherited Core Module AbstractConstructionSurface and, recursively, on its superclasses.  
+* A OuterCeilingSurface element's attributes and properties SHALL conform to all requirements imposed on the inherited Core Module AbstractConstructionSurface and, recursively, on its superclasses. 
+* A OuterFloorSurface element's attributes and properties SHALL conform to all requirements imposed on the inherited Core Module AbstractConstructionSurface and, recursively, on its superclasses. 
+* The geometry of an OuterFloorSurface SHALL be approximately horizontal, that is, approximately normal to the local “up” direction. 
+
+*WallSurface*
+* A WallSurface element's attributes and properties SHALL conform to all requirements imposed on the inherited Core Module AbstractConstructionSurface and, recursively, on its superclasses.  
+
+*WindowSurface*
+* A WindowSurface's attributes and properties SHALL conform to all requirements imposed on the inherited Core Module AbstractConstructionSurface and, recursively, on its superclasses.  
+
+== Dynamizer
+Requirements for the _startTime_ and _endTime_ of a Dynamizer element:
+* If the _startTime_ and _endTime_ properties of a _Dynamizer_ are not null, the following conditions apply:
+    * The _startTime_ value SHALL precede the _endTime_ value.
+    * The _startTime_ and _endTime_ values SHALL be of the same TM_Position type.
+    * The _startTime_ and _endTime_ values SHALL represent absolute time points.
+    * The _startTime_ and _endTime_ values SHALL explicitly indicate the temporal reference system to which they relate. If no temporal reference system is specified, the values SHALL relate to the Coordinated Universal Time (UTC).
+    * The _startTime_ and _endTime_ values SHALL follow the Half-Open interval, which means that the _startTime_ is inclusive and the _endTime_ is exclusive.
+
+Requirements for the _firstTimestamp_ and _lastTimestamp_ of an AbstractTimeseries element:
+* If the _firstTimestamp_ and _lastTimestamp_ properties of an AbstractTimeseries are not null, the following conditions apply:
+    * The _firstTimestamp_ value SHALL precede the _lastTimestamp_ value.
+    * The _firstTimestamp_ and _lastTimestamp_ values SHALL be of the same TM_Position type.
+
+Requirements for AtomicTimeseries:
+* If a _Dynamizer_ contains an _AbstractAtomicTimeseries_ and if the _startTime_ and _endTime_ properties of the _Dynamizer_ and the firstTimestamp and lastTimestamp properties of the _AbstractAtomicTimeseries_ are not null, the _startTime_ and _endTime_ values of the Dynamizer SHALL be identical to the firstTimestamp and lastTimestamp values of the _AbstractAtomicTimeries_.
+
+Requirements for CompositeTimeseries:
+* If a _Dynamizer_ contains a _CompositeTimeseries_ and if the _startTime_ and _endTime_ properties of the _Dynamizer_ and the _firstTimestamp_ and _lastTimestamp_ properties of the individual components of the _CompositeTimeseries_ are not null, the _firstTimestamp_ and _lastTimestamp_ values of the individual components of the _CompositeTimeseries_ SHALL represent timestamps that are relative to the absolute time points provided by the _startTime_ and _endTime_ of the _Dynamizer_ to which the components belong.
+* If the _firstTimestamp_ and _lastTimestamp_ properties of the individual components of a _CompositeTimeseries_ are not null, the _firstTimestamp_ and _lastTimestamp_ values of the individual components SHALL have non-overlapping time intervals.
+* The individual components of a _CompositeTimeseries_ SHALL be sequentially ordered. 
+* The _firstTimestamp_ value and _lastTimestamp_ value of every AbstractTimeseries referenced in a _CompositeTimeseries_ SHALL have the same TM_Position type.
+
+Requirements for GenericTimeseries and TimeValuePair:
+* The following conditions apply to all _TimeValuePair_ elements that a _GenericTimeseries_ element contains:
+    * The values of all timestamp properties SHALL be of the same _TM_Position_ type.
+    * The values of all timestamp properties SHALL NOT overlap.
+    * If the _firstTimestamp_ and _lastTimestamp_ properties of the _GenericTimeseries_ element are not null, the values of all timestamp properties SHALL be within the time interval defined by the _firstTimestamp_ and _lastTimestamp_.
+    * All timeseries values SHALL be of the same data type and, SHALL be provided using the same property; i.e., all _TimeValuePair_ elements SHALL use either the property _intValue_, or _doubleValue_, or _stringValue_, or _geometryValue_, or _uriValue_, or _boolValue_, or _implicitGeometryValue_, or _appearanceValue_. 
+* The data type provided in the _valueType_ property of the _GenericTimeseries_ element SHALL correspond to the data type of the timeseries values provided in the _TimeValuePair_ elements which the _GenericTimeseries_ element contains.
+
+Requirements regarding the type of timeseries referenced by Dynamizer:
+* A _Dynamizer_ element SHALL either contain a _sensorConnection_ property or a _dynamicData_ property.
+
+Requirements for TabulatedFileTimeseries:
+* For the _TabulatedFileTimeseries_ element, the following conditions apply regarding the use of the properties that refer to the file which is referenced by the _fileLocation_ property:
+    * Files which are referenced by the _fileLocation_ property SHALL exist.
+    * The file type provided in the _fileType_ property SHALL correspond to the file type of the referenced file. 
+    * If the _mimeType_ property is not null, it SHALL contain a MIME type which corresponds to the type of the referenced file. 
+    * The data type provided in the _valueType_ property SHALL correspond to the data type of the timeseries data provided in the referenced file.
+    * If the _numberOfHeaderLines_ property is not null, it SHALL contain a value which corresponds to the number of header lines contained in the referenced file.
+    * The field separator provided in the _fieldSeparator_ property SHALL correspond to the field separator used in the referenced file.
+    * If the _decimalSymbol_ property is not null, it SHALL contain a decimal symbol which corresponds to the decimal symbol used in the referenced file. 
+* For the _TabulatedFileTimeseries_ element, the following conditions apply regarding the use of the properties that refer to columns of the file which is referenced by the _fileLocation_ property:
+    * Either the property _timeColumnNo_ or the property _timeColumnName_ SHALL have a value.
+    * Either the property _valueColumnNo_ or the property _valueColumnName_ SHALL have a value.
+    * When the property idValue has a value, then either the property _idColumnNo_ or the property _idColumnName_ SHALL have a value.
+
+
+Requirements for StandardFileTimeseries:
+* For the _StandardFileTimeseries_ element, the following conditions apply regarding the use of the properties that refer to the file which is referenced by the _fileLocation_ property:
+    * Files which are referenced by the _fileLocation_ property SHALL exist.
+    * The type of standard provided in the _fileType_ property SHALL correspond to the type of standard to which the referenced file is compliant. 
+    * If the _mimeType_ property is not null, it SHALL contain a MIME type which corresponds to the type of the referenced file.
+
+Requirements for SensorConnection:
+* The sensor API for which a _SensorConnection_ element defines connection details SHALL exist.
+* The type of sensor API provided in the _connectionType_ property SHALL correspond to the type of sensor API for which the _SensorConnection_ element defines connection details.
+* The phenomenon provided in the _observationProperty_ property SHALL correspond to the phenomenon that is measured by the sensor.
+* If the _uom_ property is provided, it SHALL contain a unit of measurement which corresponds to the unit of measurement of the phenomenon that is measured by the sensor.
+* If the _SensorConnection_ element defines connection details to the SensorThings API, the following conditions apply:
+    * The properties _datastreamID_, _baseUrl_, and _linkToObservation_ SHALL be provided.
+    * The properties _mqttServer_ and _mqttTopic_ SHALL NOT be provided.
+    * The properties _sensorID_, _sensorName_, _observationID_, _authType_, and _linkToSensorDescription_ MAY be provided.
+* If the _SensorConnection_ element defines connection details to the ThingSpeak platform, the following conditions apply:
+    * The properties _sensorID_, _datastreamID_, _baseURL_, and _linkToObservation_ SHALL be provided.
+    * The properties _mqttServer_ and _mqttTopic_ SHALL NOT be provided.
+    * The properties _sensorName_, _observationID_, _authType_, and _linkToSensorDescription_ MAY be provided.
+* If the _SensorConnection_ element defines connection details to the Weather Underground API, the following conditions apply:
+    * The properties _sensorID_, _baseURL_, _authType_, and _linkToObservation_ SHALL be provided.
+    * The property _authType_ SHALL have the value “apiKey”.
+    * The properties _mqttServer_ and _mqttTopic_ SHALL NOT be provided.
+    * The properties _sensorName_, _datastreamID_, _observationID_, and _linkToSensorDescription_ MAY be provided.
+* If the _SensorConnection_ element defines connection details to sensor platforms using the MQTT protocol, the following conditions apply:
+    * The properties _mqttServer_, _mqttTopic_, and _authType_ SHALL be provided.
+    * The property _authType_ SHALL have the value “basic”.
+    * The properties _sensorID_, _sensorName_, _observationID_, _datastreamID_, _baseURL_, _linkToObservation_, and _linkToSensorDescription_, SHALL NOT be provided.
+
+== PointCloud
+
+* The element _PointCloud_ MAY provide a point cloud either inline or reference an external point cloud file. The following conditions apply:
+    * If the point cloud is provided inline using the property _points_, the properties _mimeType_, _pointFile_ and _pointFileSrsName_ SHALL NOT be provided. 
+    * If an external point cloud file is referenced using the property _pointFile_, 
+        * the property _mimeType_ SHALL specify the MIME type of the referenced file and 
+        * the property _pointFileSrsName_ MAY indicate the coordinate reference system used by the referenced file; the property _points_, however, SHALL NOT be provided.
+
+== Relief
+
+The property _extent_ (type: _gml:SurfacePropertyType_) SHALL describe the extent of validity of an _AbstractReliefComponent_ element using exactly one _gml:PolygonPatch_ geometry. The _gml:PolygonPatch_ geometry SHALL be given as 2D footprint polygon and MAY have inner holes.
+(This requirement is also defined as OCL constraint, a similar requirement is also defined in the CityGML 2.0 standard)
+
+== Transportation
+
+Requirements regarding granularity:
+* If an _AbstractTransportationSpace_ is represented in the granularity “area”, it SHALL contain the space geometry directly. It SHALL NOT contain the properties _trafficSpace_ and _auxiliaryTrafficSpace_ to represent the space geometries.
+* If an _AbstractTransportationSpace_ is represented in the granularity “way” or “lane”, it SHALL contain the property _trafficSpace_ or the property _auxiliaryTrafficSpace_ or both properties to represent the space geometry. It SHALL NOT contain the space geometry directly.
+* An _AbstractTransportationSpace_ MAY be represented in one, two, or three granularities at the same time.
+
+== Versioning
+
+Requirements for lifecycle properties:
+* If the _validFrom_ and _validTo_ properties of the _core:AbstractFeatureWithLifespan_ element are not null, The DateTime value of the attribute _validFrom_ property SHALL be prior to the DateTime value of the attribute _validTo_ property.
+* If the _creationDate_ and _terminationDate_ properties of the _core:AbstractFeatureWithLifespan_ element are not null, The DateTime value of the attribute _creationDate_ property SHALL be prior to the DateTime value of the attribute _terminationDate_ property.
+
+Requirements for the different Transaction types:
+* If the _type_ property of the element _Transaction_ contains the value _delete_, the element _Transaction_ SHALL contain the property _oldFeature_, but it SHALL NOT contain the property _newFeature_.
+* If the _type_ property of the element _Transaction_ contains the value _insert_, the element _Transaction_ SHALL contain the property _newFeature_, but it SHALL NOT contain the property _oldFeature_.
+* If the _type_ property of the element _Transaction_ contains the value _replace_, the element _Transaction_ SHALL contain the properties _oldFeature_ and _newFeature_.
